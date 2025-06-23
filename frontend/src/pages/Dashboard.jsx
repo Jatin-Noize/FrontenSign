@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { PDFDocument, rgb } from 'pdf-lib';
-
+import { useNavigate } from 'react-router-dom';
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const [pdfFile, setPdfFile] = useState(null);
@@ -24,6 +24,7 @@ export default function Dashboard() {
       alert('Please select a PDF file');
     }
   };
+  const navigate = useNavigate()
 
   // Generate PDF preview
   const generatePdfPreview = async (file) => {
@@ -148,20 +149,21 @@ export default function Dashboard() {
   }, [pdfPreview, signatureText, signaturePosition, pdfFile]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <nav className="bg-white shadow-sm">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-purple-900">
+      <nav className="bg-black bg-opacity-30 backdrop-blur-md shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
-              <div className="flex-shrink-0 flex items-center">
-                <h1 className="text-xl font-bold text-gray-900">PDF Editor</h1>
+              <div onClick={()=>{navigate("/")}} className="flex-shrink-0 flex items-center">
+                <h1 className="text-xl font-bold text-white">Mr. Signify</h1>
               </div>
             </div>
             <div className="flex items-center">
-              <span className="text-gray-500 mr-4">Welcome, {user?.email}</span>
+               <span className="text-purple-200  mr-2">Welcome,</span>
+              <span className="text-purple-200 rounded-full border-2 p-2 mr-4">{user?.userName}</span>
               <button
                 onClick={logout}
-                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 transition-all duration-300"
               >
                 Logout
               </button>
@@ -171,23 +173,23 @@ export default function Dashboard() {
       </nav>
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <div className="border-4 border-dashed border-gray-200 rounded-lg p-6">
-            <h2 className="text-2xl font-bold mb-6">PDF Editor with Draggable Signature</h2>
+          <div className="border-2 border-purple-500/20 bg-black bg-opacity-20 backdrop-blur-sm rounded-lg p-6">
+            <h2 className="text-2xl font-bold mb-6 text-white">PDF Editor with Draggable Signature</h2>
             
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-purple-200 mb-1">
                   Select PDF File
                 </label>
                 <input
                   type="file"
                   accept="application/pdf"
                   onChange={handleFileChange}
-                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                  className="block w-full text-sm text-purple-200 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-purple-600/50 file:text-white hover:file:bg-purple-700/50"
                 />
               </div>
               <div>
-                <label htmlFor="signature" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="signature" className="block text-sm font-medium text-purple-200 mb-1">
                   Signature Text
                 </label>
                 <input
@@ -195,14 +197,14 @@ export default function Dashboard() {
                   id="signature"
                   value={signatureText}
                   onChange={(e) => setSignatureText(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                  className="mt-1 block w-full px-3 py-2 border border-purple-500/30 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500 bg-black/30 text-white"
                   placeholder="Enter your signature text"
                 />
               </div>
               {pdfFile && (
                 <div 
                   ref={pdfContainerRef}
-                  className="relative border border-gray-300 rounded-md overflow-auto max-h-96"
+                  className="relative border-2 border-purple-500/20 rounded-md overflow-auto max-h-96 bg-white"
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
                   onMouseLeave={handleMouseUp}
@@ -233,14 +235,14 @@ export default function Dashboard() {
                 <button
                   onClick={handleAddSignature}
                   disabled={isLoading || !pdfFile || !signatureText}
-                  className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300"
+                  className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 disabled:bg-purple-300 transition-all duration-300"
                 >
                   {isLoading ? 'Processing...' : 'Add Signature to PDF'}
                 </button>
                 {modifiedPdf && (
                   <button
                     onClick={handleDownload}
-                    className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700"
+                    className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-300"
                   >
                     Download Signed PDF
                   </button>

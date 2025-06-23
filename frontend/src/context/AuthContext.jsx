@@ -31,8 +31,8 @@ useEffect(() => {
   loadUser();
 }, []);
 
-  const register = async (email, password) => {
-    const response = await axios.post('/api/auth/register', { email, password });
+  const register = async (email,userName, password) => {
+    const response = await axios.post('/api/auth/register', { email,userName, password });
     setUser(response.data.user);
     navigate('/dashboard');
   };
